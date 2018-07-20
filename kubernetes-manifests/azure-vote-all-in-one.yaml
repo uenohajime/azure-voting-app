@@ -5,7 +5,7 @@ metadata:
 provisioner: kubernetes.io/azure-disk
 parameters:
  skuName: Standard_LRS
- location: eastus
+ location: japaneast
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -43,7 +43,7 @@ spec:
     spec:
       containers:
       - name: azure-vote-back
-        image: microsoft/azure-vote-back:v1
+        image: yoichikawasaki/azure-vote-back:v1
         args: ["--ignore-db-dir=lost+found"]
         ports:
         - containerPort: 3306
@@ -105,7 +105,7 @@ spec:
     spec:
       containers:
       - name: azure-vote-front
-        image: microsoft/azure-vote-front:v1
+        image: yoichikawasaki/azure-vote-front:v1
         resources:
           requests:
             cpu: 250m
