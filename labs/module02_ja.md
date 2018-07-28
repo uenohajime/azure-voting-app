@@ -23,7 +23,7 @@ mysql-pv-claim   Bound     pvc-347c7f87-9117-11e8-be5c-0267c07f8713   1Gi       
 ```
 
 ## Secretリソースの作成
-次のコマンドでSecretリソースを作成する。機密情報などに対して別途Secretリソースを作成し、環境変数として参照させることが推奨されている
+次のコマンドでSecretリソースを作成する。機密情報などに対して別途Secretリソースを作成し、環境変数として参照させることが推奨されている
 ```
 $ kubectl apply -f kubernetes-manifests/pod-secrets.yaml
 
@@ -96,7 +96,7 @@ azure-vote-front-86694fdcb4-5jjsm   0/1       ContainerCreating   0          1m
 azure-vote-back-75b9bbc874-8wx6p   1/1       Running   0         1m
 azure-vote-front-86694fdcb4-5jjsm   1/1       Running   0         2m
 ```
-> オプション`-w`でPodの情報を監視続け変化があったPodの情報が出力される
+> オプション`-w`でPodの情報を監視続け変化があったPodの情報が出力される
 
 作成されたDeploymentの一覧を取得して`DESIRED`の数と`AVAILABLE`の数が一致していることを確認する
 ```sh
@@ -126,10 +126,10 @@ azure-vote-front   LoadBalancer   10.0.188.136   <pending>     80:32156/TCP   36
 kubernetes         ClusterIP      10.0.0.1       <none>        443/TCP        46m
 azure-vote-front   LoadBalancer   10.0.188.136   13.77.158.144   80:32156/TCP   3m
 ```
-> オプション`-w`でPodの情報を監視続け変化があったPodの情報が出力される
+> オプション`-w`でPodの情報を監視続け変化があったPodの情報が出力される
 
 
-作成されたServiceに`EXTERNAL-IP`経由でアクセスする。
+作成されたServiceに`EXTERNAL-IP`経由でアクセスする。
 ```
 curl 13.77.158.144    << 上記コマンドで取得したEXTERNAL-IPを指定
 ```

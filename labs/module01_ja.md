@@ -19,7 +19,7 @@ $ az aks create -g user_akstest \
     -k 1.10.5 \
     --generate-ssh-keys
 ```
-> - このチュートリアルではグループリソース名`user-akstest`の元に AKSクラスタ`user-akscluster` (ノード数 `3`、Kubernetesバージョン`.10.5`)を作成すると仮定している
+> - このチュートリアルではグループリソース名`user-akstest`の元に AKSクラスタ`user-akscluster` (ノード数 `3`、Kubernetesバージョン`.10.5`)を作成すると仮定している
 > - 新規でSSH鍵を作成するのではなく、もし既存のSSH鍵があって、それを利用したい場合は、AKSクラスタ作成時に`--generate-ssh-keys`オプションを指定するのはなく`--ssh-key-value`オプションに自分のSSH鍵を指定ください
 
 

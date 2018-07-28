@@ -6,21 +6,21 @@
 
 ![](../img/cloud-shell-open-bash.png)
 
->[NOTE]: https://shell.azure.com/ にアクセスすることでフルスクリーンのAzure Cloud Shellを使うことができます
+>[NOTE]: https://shell.azure.com/ にアクセスすることでフルスクリーンのAzure Cloud Shellを使うことができます
 
-もしAzure Cloud Shellへのアクセスが初めての場合は、次のようなデータ永続化のためのAzure Fileの設定のためのプロンプトが表示されます
+もしAzure Cloud Shellへのアクセスが初めての場合は、次のようなデータ永続化のためのAzure Fileの設定のためのプロンプトが表示されます
 
 ![](../img/cloud-shell-welcome.png)
 
-"Bash (Linux)"オプションをクリックして、Azureサブスクリプションを選択して、"Create Storage"をクリックします
+"Bash (Linux)"オプションをクリックして、Azureサブスクリプションを選択して、"Create Storage"をクリックします
 
 ![](../img/cloud-shell-no-storage-mounted.png)
 
 数秒後にストレージアカウントが作成されます。これでAzure Cloud Shellを使う準備が整いました。
 
-## Azureサブスクリプションの選択（複数ある場合のみ）
-
-次のコマンドを実行してAzureサブスクリプション一覧を表示します
+## Azureサブスクリプションの選択（複数ある場合のみ）
+
+次のコマンドを実行してAzureサブスクリプション一覧を表示します
 
 ```
 $ az account list -o table
@@ -33,7 +33,7 @@ Another sub2                     AzureCloud   xxxxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx
 Another sub3                     AzureCloud   xxxxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxx  Enabled  False
 ```
 
-もし、複数のサブスクリプションを持っている場合は、次のように利用したいサブスクリプション名をデフォルトに設定ください
+もし、複数のサブスクリプションを持っている場合は、次のように利用したいサブスクリプション名をデフォルトに設定ください
 
 ```
 $ az account set -s 'Visual Studio Premium with MSDN'
@@ -41,7 +41,7 @@ $ az account set -s 'Visual Studio Premium with MSDN'
 
 ## Register Azure Resource Providers
 
-このハンズオンラボではAzureのNetwork, Storage, Compute と ContainerSerivcesのリソースを管理しますが、もしお使いのサブスクリプションにおいてこれらリソース管理が初めての場合は次のコマンドを実行してリソースプロバイダーを登録ください
+このハンズオンラボではAzureのNetwork, Storage, Compute と ContainerSerivcesのリソースを管理しますが、もしお使いのサブスクリプションにおいてこれらリソース管理が初めての場合は次のコマンドを実行してリソースプロバイダーを登録ください
 
 ```sh
 $ az provider register -n Microsoft.Network
