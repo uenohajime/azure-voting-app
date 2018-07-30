@@ -93,8 +93,10 @@ kubectl get pod -w
 NAME                                READY     STATUS              RESTARTS   AGE
 azure-vote-back-75b9bbc874-8wx6p    0/1       ContainerCreating   0          1m
 azure-vote-front-86694fdcb4-5jjsm   0/1       ContainerCreating   0          1m
+azure-vote-front-86694fdcb4-t6pg6   0/1       ContainerCreating   0          1m
 azure-vote-back-75b9bbc874-8wx6p   1/1       Running   0         1m
 azure-vote-front-86694fdcb4-5jjsm   1/1       Running   0         2m
+azure-vote-front-86694fdcb4-t6pg6   1/1       Running   0         2m
 ```
 > オプション`-w`でPodの情報を監視続け変化があったPodの情報が出力される
 
@@ -103,8 +105,8 @@ azure-vote-front-86694fdcb4-5jjsm   1/1       Running   0         2m
 $ kubectl get deploy
 
 NAME               DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
-azure-vote-back    1         1         1            1           4m
-azure-vote-front   1         1         1            1           4m
+azure-vote-back    1         1         1            1           2m
+azure-vote-front   2         2         2            2           2m
 ```
 
 ## Serviceの作成
