@@ -6,10 +6,6 @@ $ az group create -g user_akstest -l westus2
 ```
 
 ## 2. AKSクラスタを作成
-もしまだ$HOME/.sshが作成されていない場合は作成する
-```sh
-$ mkdir -p ~/.ssh
-```
 
 AKSクラスタの作成
 ```sh
