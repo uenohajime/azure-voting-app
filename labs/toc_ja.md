@@ -6,6 +6,6 @@
  2. [Kubernetesにアプリケーションをデプロイ](module02_ja.md)
 
 #### Cloud Native Days Tokyo 2018
-- [Azure Kubernetes Services (AKS) ハンズオンラボ](cndt_aks_handson.pdf)
+- [Azure Kubernetes Services (AKS) ハンズオンラボ資料](cndt_aks_handson.pdf)
 
 
