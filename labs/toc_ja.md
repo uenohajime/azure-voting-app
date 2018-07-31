@@ -8,4 +8,4 @@
 #### Cloud Native Days Tokyo 2018
 - [Azure Kubernetes Services (AKS) ハンズオンラボ資料](cndt_aks_handson.pdf)
 
-
+![](qrcode_shortcut.png)
