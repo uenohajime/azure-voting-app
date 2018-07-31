@@ -6,6 +6,4 @@
 2. [Deploy the application to AKS Cluster](module02.md)
 
 ### Cloud Native Days Tokyo 2018
-- [Azure Kubernetes Services Handson Labs Material](cndt_aks_handson.pdf)
-
-![](qrcode_shortcut.png)
+- [Azure Kubernetes Services Handson Labs Material (Japanese)](cndt_aks_handson.pdf)
