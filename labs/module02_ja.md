@@ -88,7 +88,7 @@ deployment.apps/azure-vote-front created
 作成されたPodの一覧を取得してPodステータスが`Running`となっていることを確認する
 
 ```sh
-kubectl get pod -w
+$ kubectl get pod -w
 
 NAME                                READY     STATUS              RESTARTS   AGE
 azure-vote-back-75b9bbc874-8wx6p    0/1       ContainerCreating   0          1m
@@ -121,7 +121,8 @@ service/azure-vote-front created
 作成されたServiceの一覧を取得する。`azure-vote-front`に`EXTERNAL-IP`が付与されるまで待つ
 
 ```sh
-kubectl get svc -w
+$ kubectl get svc -w
+
 NAME               TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
 azure-vote-back    ClusterIP      10.0.127.62    <none>        3306/TCP       36s
 azure-vote-front   LoadBalancer   10.0.188.136   <pending>     80:32156/TCP   36s
@@ -133,13 +134,13 @@ azure-vote-front   LoadBalancer   10.0.188.136   13.77.158.144   80:32156/TCP   
 
 作成されたServiceに`EXTERNAL-IP`経由でアクセスする。
 ```
-curl 13.77.158.144    << 上記コマンドで取得したEXTERNAL-IPを指定
+$ curl 13.77.158.144    << 上記コマンドで取得したEXTERNAL-IPを指定
 ```
 
 参考までに、`EXTERNAL-IP`は次のように`-o jsonpath`オプションでを抜き出すことも可能
 ```
-EXTERNALIP=$(kubectl get svc azure-vote-front -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-echo $EXTERNALIP
+$ EXTERNALIP=$(kubectl get svc azure-vote-front -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+$ echo $EXTERNALIP
 ```
 
 ![](../img/browse-app.png)
