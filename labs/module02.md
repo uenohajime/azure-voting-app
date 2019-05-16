@@ -1,5 +1,11 @@
 # Module02: Deploy the application to AKS Cluster
 
+In this module, you're deploying an application with the following architecture to the Kubernetes cluster that you've provisioned in the previous module
+
+![](../img/voting-app-arch.png)
+
+## Get handson material
+
 Clone the Github repo via the command line, and change directory:
 
 ```sh

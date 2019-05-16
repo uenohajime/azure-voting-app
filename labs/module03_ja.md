@@ -9,4 +9,4 @@ az group delete -n user_akstest
 おつかれさまでした!
 
 ---
-[Top](toc.md) | [Back](module02.md)
+[Top](toc_ja.md) | [Back](module02_ja.md)

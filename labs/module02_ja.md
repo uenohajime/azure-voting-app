@@ -1,5 +1,11 @@
 # Module02: Kubernetesにアプリケーションをデプロイする
 
+このモジュールでは全モジュールでプロビジョニングされたKubernetesクラスタに次のような構成のアプリケーションをデプロイメントしていきます。
+
+![](../img/voting-app-arch.png)
+
+## ハンズオンマテリアルの取得
+
 次のコマンドでGithubレポジトリをCloneしてから、そのディレクトリに移動する
 ```sh
 git clone https://github.com/yokawasa/azure-voting-app.git
