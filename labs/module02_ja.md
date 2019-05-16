@@ -2,31 +2,37 @@
 
 次のコマンドでGithubレポジトリをCloneしてから、そのディレクトリに移動する
 ```sh
-$ git clone https://github.com/yokawasa/azure-voting-app.git
-$ cd azure-voting-app
+git clone https://github.com/yokawasa/azure-voting-app.git
+cd azure-voting-app
 ```
 
 ## Storageリソースの作成
 ```sh
-$ kubectl apply -f kubernetes-manifests/storage-resources.yaml
-
+kubectl apply -f kubernetes-manifests/storage-resources.yaml
+```
+> output
+```
 storageclass.storage.k8s.io/slow created
 persistentvolumeclaim/mysql-pv-claim created
 ```
 
 次のコマンドでPVCリソース情報を取得して、作成した`mysql-pv-claim` PVCオブジェクトのステータスが`Bound`であることを確認する
+```sh
+kubectl get pvc
 ```
-$ kubectl get pvc
-
+> output
+```
 NAME             STATUS    VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
 mysql-pv-claim   Bound     pvc-347c7f87-9117-11e8-be5c-0267c07f8713   1Gi        RWO            default        1m
 ```
 
 ## Secretリソースの作成
 次のコマンドでSecretリソースを作成する。機密情報などに対して別途Secretリソースを作成し、環境変数として参照させることが推奨されている
+```sh
+kubectl apply -f kubernetes-manifests/pod-secrets.yaml
 ```
-$ kubectl apply -f kubernetes-manifests/pod-secrets.yaml
-
+> output
+```
 secret/azure-vote created
 ```
 
@@ -34,8 +40,10 @@ secret/azure-vote created
 
 登録されているSecret の一覧を取得
 ```sh
-$ kubectl get secrets
-
+kubectl get secrets
+```
+> output
+```
 NAME                  TYPE                                  DATA      AGE
 azure-vote            Opaque                                5         30s
 default-token-bgsqd   kubernetes.io/service-account-token   3         36m
@@ -44,8 +52,10 @@ default-token-bgsqd   kubernetes.io/service-account-token   3         36m
 Secretリソース`azure-vote`の情報取得
 
 ```sh 
-$ kubectl get secrets azure-vote -o yaml
-
+kubectl get secrets azure-vote -o yaml
+```
+> output
+```yaml
 apiVersion: v1
 data:
   MYSQL_DATABASE: YXp1cmV2b3Rl
@@ -71,16 +81,20 @@ type: Opaque
 
 Secretの各値はbase64でエンコードされているため中身をbase64デコードして確認する（例: MYSQL_PASSWORD）
 ```sh
-$ echo "UGFzc3dvcmQxMg==" | base64 --decode
-
+echo "UGFzc3dvcmQxMg==" | base64 --decode
+```
+> output
+```
 Password12
 ```
 
 ## Deploymentの作成
 次のコマンドでDeploymentを作成する
+```sh
+kubectl apply -f kubernetes-manifests/azure-vote-deployment.yaml
 ```
-$ kubectl apply -f kubernetes-manifests/azure-vote-deployment.yaml
-
+> output
+```
 deployment.apps/azure-vote-back created
 deployment.apps/azure-vote-front created
 ```
@@ -89,7 +103,9 @@ deployment.apps/azure-vote-front created
 
 ```sh
 kubectl get pod -w
-
+```
+> output
+```
 NAME                                READY     STATUS              RESTARTS   AGE
 azure-vote-back-75b9bbc874-8wx6p    0/1       ContainerCreating   0          1m
 azure-vote-front-86694fdcb4-5jjsm   0/1       ContainerCreating   0          1m
@@ -102,8 +118,10 @@ azure-vote-front-86694fdcb4-t6pg6   1/1       Running   0         2m
 
 作成されたDeploymentの一覧を取得して`DESIRED`の数と`AVAILABLE`の数が一致していることを確認する
 ```sh
-$ kubectl get deploy
-
+kubectl get deploy
+```
+> output
+```
 NAME               DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
 azure-vote-back    1         1         1            1           2m
 azure-vote-front   2         2         2            2           2m
@@ -112,8 +130,10 @@ azure-vote-front   2         2         2            2           2m
 ## Serviceの作成
 次のコマンドでServiceを作成する
 ```sh
-$ kubectl apply -f kubernetes-manifests/services.yaml
-
+kubectl apply -f kubernetes-manifests/services.yaml
+```
+> output
+```
 service/azure-vote-back created
 service/azure-vote-front created
 ```
@@ -122,6 +142,9 @@ service/azure-vote-front created
 
 ```sh
 kubectl get svc -w
+```
+> output
+```
 NAME               TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
 azure-vote-back    ClusterIP      10.0.127.62    <none>        3306/TCP       36s
 azure-vote-front   LoadBalancer   10.0.188.136   <pending>     80:32156/TCP   36s
@@ -137,7 +160,7 @@ curl 13.77.158.144    << 上記コマンドで取得したEXTERNAL-IPを指定
 ```
 
 参考までに、`EXTERNAL-IP`は次のように`-o jsonpath`オプションでを抜き出すことも可能
-```
+```sh
 EXTERNALIP=$(kubectl get svc azure-vote-front -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
 echo $EXTERNALIP
 ```
@@ -145,4 +168,4 @@ echo $EXTERNALIP
 ![](../img/browse-app.png)
 
 ---
-[Top](toc_ja.md) | [Back](module01_ja.md) | Next
+[Top](toc_ja.md) | [Back](module01_ja.md) | [Next](module03_ja.md)
