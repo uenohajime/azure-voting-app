@@ -1,23 +1,36 @@
 # Module02: Kubernetesにアプリケーションをデプロイする
 
+<!-- TOC -->
+- [Module02: Kubernetesにアプリケーションをデプロイする](#module02-kubernetes%E3%81%AB%E3%82%A2%E3%83%97%E3%83%AA%E3%82%B1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E3%82%92%E3%83%87%E3%83%97%E3%83%AD%E3%82%A4%E3%81%99%E3%82%8B)
+  - [Storageリソースの作成](#storage%E3%83%AA%E3%82%BD%E3%83%BC%E3%82%B9%E3%81%AE%E4%BD%9C%E6%88%90)
+  - [Secretリソースの作成](#secret%E3%83%AA%E3%82%BD%E3%83%BC%E3%82%B9%E3%81%AE%E4%BD%9C%E6%88%90)
+    - [[参考] 作成されたSecretリソースの機密情報の確認](#%E5%8F%82%E8%80%83-%E4%BD%9C%E6%88%90%E3%81%95%E3%82%8C%E3%81%9Fsecret%E3%83%AA%E3%82%BD%E3%83%BC%E3%82%B9%E3%81%AE%E6%A9%9F%E5%AF%86%E6%83%85%E5%A0%B1%E3%81%AE%E7%A2%BA%E8%AA%8D)
+  - [Deploymentの作成](#deployment%E3%81%AE%E4%BD%9C%E6%88%90)
+  - [Serviceの作成](#service%E3%81%AE%E4%BD%9C%E6%88%90)
+
+
 次のコマンドでGithubレポジトリをCloneしてから、そのディレクトリに移動する
 ```sh
-$ git clone https://github.com/yokawasa/azure-voting-app.git
-$ cd azure-voting-app
+git clone https://github.com/yokawasa/azure-voting-app.git
+cd azure-voting-app
 ```
 
 ## Storageリソースの作成
 ```sh
-$ kubectl apply -f kubernetes-manifests/storage-resources.yaml
-
+kubectl apply -f kubernetes-manifests/storage-resources.yaml
+```
+>出力結果
+```
 storageclass.storage.k8s.io/slow created
 persistentvolumeclaim/mysql-pv-claim created
 ```
 
 次のコマンドでPVCリソース情報を取得して、作成した`mysql-pv-claim` PVCオブジェクトのステータスが`Bound`であることを確認する
 ```
-$ kubectl get pvc
-
+kubectl get pvc
+```
+> 出力結果
+```
 NAME             STATUS    VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
 mysql-pv-claim   Bound     pvc-347c7f87-9117-11e8-be5c-0267c07f8713   1Gi        RWO            default        1m
 ```
@@ -34,8 +47,10 @@ secret/azure-vote created
 
 登録されているSecret の一覧を取得
 ```sh
-$ kubectl get secrets
-
+kubectl get secrets
+```
+> 出力結果
+```
 NAME                  TYPE                                  DATA      AGE
 azure-vote            Opaque                                5         30s
 default-token-bgsqd   kubernetes.io/service-account-token   3         36m
@@ -44,8 +59,10 @@ default-token-bgsqd   kubernetes.io/service-account-token   3         36m
 Secretリソース`azure-vote`の情報取得
 
 ```sh 
-$ kubectl get secrets azure-vote -o yaml
-
+kubectl get secrets azure-vote -o yaml
+```
+> 出力結果
+```
 apiVersion: v1
 data:
   MYSQL_DATABASE: YXp1cmV2b3Rl
@@ -71,16 +88,20 @@ type: Opaque
 
 Secretの各値はbase64でエンコードされているため中身をbase64デコードして確認する（例: MYSQL_PASSWORD）
 ```sh
-$ echo "UGFzc3dvcmQxMg==" | base64 --decode
-
+echo "UGFzc3dvcmQxMg==" | base64 --decode
+```
+> 出力結果
+```
 Password12
 ```
 
 ## Deploymentの作成
 次のコマンドでDeploymentを作成する
 ```
-$ kubectl apply -f kubernetes-manifests/azure-vote-deployment.yaml
-
+kubectl apply -f kubernetes-manifests/azure-vote-deployment.yaml
+```
+> 出力結果
+```
 deployment.apps/azure-vote-back created
 deployment.apps/azure-vote-front created
 ```
@@ -89,7 +110,9 @@ deployment.apps/azure-vote-front created
 
 ```sh
 kubectl get pod -w
-
+```
+> 出力結果
+```
 NAME                                READY     STATUS              RESTARTS   AGE
 azure-vote-back-75b9bbc874-8wx6p    0/1       ContainerCreating   0          1m
 azure-vote-front-86694fdcb4-5jjsm   0/1       ContainerCreating   0          1m
@@ -102,8 +125,10 @@ azure-vote-front-86694fdcb4-t6pg6   1/1       Running   0         2m
 
 作成されたDeploymentの一覧を取得して`DESIRED`の数と`AVAILABLE`の数が一致していることを確認する
 ```sh
-$ kubectl get deploy
-
+kubectl get deploy
+```
+> 出力結果
+```
 NAME               DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
 azure-vote-back    1         1         1            1           2m
 azure-vote-front   2         2         2            2           2m
@@ -112,8 +137,10 @@ azure-vote-front   2         2         2            2           2m
 ## Serviceの作成
 次のコマンドでServiceを作成する
 ```sh
-$ kubectl apply -f kubernetes-manifests/services.yaml
-
+kubectl apply -f kubernetes-manifests/services.yaml
+```
+> 出力結果
+```
 service/azure-vote-back created
 service/azure-vote-front created
 ```
@@ -122,6 +149,9 @@ service/azure-vote-front created
 
 ```sh
 kubectl get svc -w
+```
+> 出力結果
+```
 NAME               TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
 azure-vote-back    ClusterIP      10.0.127.62    <none>        3306/TCP       36s
 azure-vote-front   LoadBalancer   10.0.188.136   <pending>     80:32156/TCP   36s
