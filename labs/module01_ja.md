@@ -16,6 +16,7 @@ az group create -g user_akstest -l japaneast
 ## 2. AKSクラスタを作成
 
 ### 2-1. AKSクラスタの作成 (管理者アカウントで実行する場合)
+
 ```sh
 az aks create -g user_akstest \
     -n userakscluster \
@@ -46,7 +47,7 @@ az ad sp create-for-rbac --skip-assignment -n my-aks-sp
 }
 ```
 
-次のようにサービスプリンシパル情報を指定してAKSクラスタを作成する 
+次のようにサービスプリンシパル情報を指定してAKSクラスタを作成します
 ```sh
 SP_CLIENT_ID="<上記サービスプリンシパル情報のappID>"
 SP_CLIENT_SECRET="<上記サービスプリンシパル情報のpassword>"
@@ -60,6 +61,9 @@ az aks create -g user_akstest \
     --client-secret $SP_CLIENT_SECRET \
     --generate-ssh-keys
 ```
+> - このチュートリアルではグループリソース名`user-akstest`の元に AKSクラスタ`user-akscluster` (ノード数 `3`、Kubernetesバージョン`1.12.5`)を作成すると仮定している
+> - `--service-principal`と`--client-secret`でそれぞれサービスプリンシパルIDとサービスプリンシパルパスワードを指定する
+> - 新規でSSH鍵を作成するのではなく、もし既存のSSH鍵があって、それを利用したい場合は、AKSクラスタ作成時に`--generate-ssh-keys`オプションを指定するのはなく`--ssh-key-value`オプションに自分のSSH鍵を指定ください
 
 ## 3. クラスタアクセス用資格情報取得
 
