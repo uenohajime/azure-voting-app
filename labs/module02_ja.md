@@ -2,12 +2,18 @@
 
 <!-- TOC -->
 - [Module02: Kubernetesにアプリケーションをデプロイする](#module02-kubernetes%E3%81%AB%E3%82%A2%E3%83%97%E3%83%AA%E3%82%B1%E3%83%BC%E3%82%B7%E3%83%A7%E3%83%B3%E3%82%92%E3%83%87%E3%83%97%E3%83%AD%E3%82%A4%E3%81%99%E3%82%8B)
+  - [ハンズオンマテリアルの取得](#%E3%83%8F%E3%83%B3%E3%82%BA%E3%82%AA%E3%83%B3%E3%83%9E%E3%83%86%E3%83%AA%E3%82%A2%E3%83%AB%E3%81%AE%E5%8F%96%E5%BE%97)
   - [Storageリソースの作成](#storage%E3%83%AA%E3%82%BD%E3%83%BC%E3%82%B9%E3%81%AE%E4%BD%9C%E6%88%90)
   - [Secretリソースの作成](#secret%E3%83%AA%E3%82%BD%E3%83%BC%E3%82%B9%E3%81%AE%E4%BD%9C%E6%88%90)
     - [[参考] 作成されたSecretリソースの機密情報の確認](#%E5%8F%82%E8%80%83-%E4%BD%9C%E6%88%90%E3%81%95%E3%82%8C%E3%81%9Fsecret%E3%83%AA%E3%82%BD%E3%83%BC%E3%82%B9%E3%81%AE%E6%A9%9F%E5%AF%86%E6%83%85%E5%A0%B1%E3%81%AE%E7%A2%BA%E8%AA%8D)
   - [Deploymentの作成](#deployment%E3%81%AE%E4%BD%9C%E6%88%90)
   - [Serviceの作成](#service%E3%81%AE%E4%BD%9C%E6%88%90)
 
+このモジュールでは全モジュールでプロビジョニングされたKubernetesクラスタに次のような構成のアプリケーションをデプロイメントしていきます。
+
+![](../img/voting-app-arch.png)
+
+## ハンズオンマテリアルの取得
 
 次のコマンドでGithubレポジトリをCloneしてから、そのディレクトリに移動する
 ```sh
@@ -19,17 +25,17 @@ cd azure-voting-app
 ```sh
 kubectl apply -f kubernetes-manifests/storage-resources.yaml
 ```
->出力結果
+> output
 ```
 storageclass.storage.k8s.io/slow created
 persistentvolumeclaim/mysql-pv-claim created
 ```
 
 次のコマンドでPVCリソース情報を取得して、作成した`mysql-pv-claim` PVCオブジェクトのステータスが`Bound`であることを確認する
-```
+```sh
 kubectl get pvc
 ```
-> 出力結果
+> output
 ```
 NAME             STATUS    VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
 mysql-pv-claim   Bound     pvc-347c7f87-9117-11e8-be5c-0267c07f8713   1Gi        RWO            default        1m
@@ -37,9 +43,11 @@ mysql-pv-claim   Bound     pvc-347c7f87-9117-11e8-be5c-0267c07f8713   1Gi       
 
 ## Secretリソースの作成
 次のコマンドでSecretリソースを作成する。機密情報などに対して別途Secretリソースを作成し、環境変数として参照させることが推奨されている
+```sh
+kubectl apply -f kubernetes-manifests/pod-secrets.yaml
 ```
-$ kubectl apply -f kubernetes-manifests/pod-secrets.yaml
-
+> output
+```
 secret/azure-vote created
 ```
 
@@ -49,7 +57,7 @@ secret/azure-vote created
 ```sh
 kubectl get secrets
 ```
-> 出力結果
+> output
 ```
 NAME                  TYPE                                  DATA      AGE
 azure-vote            Opaque                                5         30s
@@ -61,8 +69,8 @@ Secretリソース`azure-vote`の情報取得
 ```sh 
 kubectl get secrets azure-vote -o yaml
 ```
-> 出力結果
-```
+> output
+```yaml
 apiVersion: v1
 data:
   MYSQL_DATABASE: YXp1cmV2b3Rl
@@ -90,17 +98,17 @@ Secretの各値はbase64でエンコードされているため中身をbase64�
 ```sh
 echo "UGFzc3dvcmQxMg==" | base64 --decode
 ```
-> 出力結果
+> output
 ```
 Password12
 ```
 
 ## Deploymentの作成
 次のコマンドでDeploymentを作成する
-```
+```sh
 kubectl apply -f kubernetes-manifests/azure-vote-deployment.yaml
 ```
-> 出力結果
+> output
 ```
 deployment.apps/azure-vote-back created
 deployment.apps/azure-vote-front created
@@ -111,7 +119,7 @@ deployment.apps/azure-vote-front created
 ```sh
 kubectl get pod -w
 ```
-> 出力結果
+> output
 ```
 NAME                                READY     STATUS              RESTARTS   AGE
 azure-vote-back-75b9bbc874-8wx6p    0/1       ContainerCreating   0          1m
@@ -127,7 +135,7 @@ azure-vote-front-86694fdcb4-t6pg6   1/1       Running   0         2m
 ```sh
 kubectl get deploy
 ```
-> 出力結果
+> output
 ```
 NAME               DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
 azure-vote-back    1         1         1            1           2m
@@ -139,7 +147,7 @@ azure-vote-front   2         2         2            2           2m
 ```sh
 kubectl apply -f kubernetes-manifests/services.yaml
 ```
-> 出力結果
+> output
 ```
 service/azure-vote-back created
 service/azure-vote-front created
@@ -150,7 +158,7 @@ service/azure-vote-front created
 ```sh
 kubectl get svc -w
 ```
-> 出力結果
+> output
 ```
 NAME               TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)        AGE
 azure-vote-back    ClusterIP      10.0.127.62    <none>        3306/TCP       36s
@@ -167,7 +175,7 @@ curl 13.77.158.144    << 上記コマンドで取得したEXTERNAL-IPを指定
 ```
 
 参考までに、`EXTERNAL-IP`は次のように`-o jsonpath`オプションでを抜き出すことも可能
-```
+```sh
 EXTERNALIP=$(kubectl get svc azure-vote-front -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
 echo $EXTERNALIP
 ```
@@ -175,4 +183,4 @@ echo $EXTERNALIP
 ![](../img/browse-app.png)
 
 ---
-[Top](toc_ja.md) | [Back](module01_ja.md) | Next
+[Top](toc_ja.md) | [Back](module01_ja.md) | [Next](module03_ja.md)

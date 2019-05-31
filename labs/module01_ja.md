@@ -5,7 +5,7 @@
   - [1. リソースグループを作成](#1-%E3%83%AA%E3%82%BD%E3%83%BC%E3%82%B9%E3%82%B0%E3%83%AB%E3%83%BC%E3%83%97%E3%82%92%E4%BD%9C%E6%88%90)
   - [2. AKSクラスタを作成](#2-aks%E3%82%AF%E3%83%A9%E3%82%B9%E3%82%BF%E3%82%92%E4%BD%9C%E6%88%90)
     - [2-1. AKSクラスタの作成 (管理者アカウントで実行する場合)](#2-1-aks%E3%82%AF%E3%83%A9%E3%82%B9%E3%82%BF%E3%81%AE%E4%BD%9C%E6%88%90-%E7%AE%A1%E7%90%86%E8%80%85%E3%82%A2%E3%82%AB%E3%82%A6%E3%83%B3%E3%83%88%E3%81%A7%E5%AE%9F%E8%A1%8C%E3%81%99%E3%82%8B%E5%A0%B4%E5%90%88)
-    - [2-2. AKSクラスタの作成 (管理者権限のないアカウントの場合)](#2-2-aks%E3%82%AF%E3%83%A9%E3%82%B9%E3%82%BF%E3%81%AE%E4%BD%9C%E6%88%90-%E7%AE%A1%E7%90%86%E8%80%85%E6%A8%A9%E9%99%90%E3%81%AE%E3%81%AA%E3%81%84%E3%82%A2%E3%82%AB%E3%82%A6%E3%83%B3%E3%83%88%E3%81%AE%E5%A0%B4%E5%90%88)
+    - [2-2. AKSクラスタの作成 (管理者権限のないアカウントで実行する場合)](#2-2-aks%E3%82%AF%E3%83%A9%E3%82%B9%E3%82%BF%E3%81%AE%E4%BD%9C%E6%88%90-%E7%AE%A1%E7%90%86%E8%80%85%E6%A8%A9%E9%99%90%E3%81%AE%E3%81%AA%E3%81%84%E3%82%A2%E3%82%AB%E3%82%A6%E3%83%B3%E3%83%88%E3%81%A7%E5%AE%9F%E8%A1%8C%E3%81%99%E3%82%8B%E5%A0%B4%E5%90%88)
   - [3. クラスタアクセス用資格情報取得](#3-%E3%82%AF%E3%83%A9%E3%82%B9%E3%82%BF%E3%82%A2%E3%82%AF%E3%82%BB%E3%82%B9%E7%94%A8%E8%B3%87%E6%A0%BC%E6%83%85%E5%A0%B1%E5%8F%96%E5%BE%97)
 
 ## 1. リソースグループを作成
@@ -20,13 +20,14 @@ az group create -g user_akstest -l japaneast
 az aks create -g user_akstest \
     -n userakscluster \
     -c 3 \
-    -k 1.10.5 \
+    -k 1.12.7 \
+    --enable-addons http_application_routing \
     --generate-ssh-keys
 ```
-> - このチュートリアルではグループリソース名`user-akstest`の元に AKSクラスタ`user-akscluster` (ノード数 `3`、Kubernetesバージョン`.10.5`)を作成すると仮定している
+> - このチュートリアルではグループリソース名`user-akstest`の元に AKSクラスタ`user-akscluster` (ノード数 `3`、Kubernetesバージョン`1.12.5`)を作成すると仮定している
 > - 新規でSSH鍵を作成するのではなく、もし既存のSSH鍵があって、それを利用したい場合は、AKSクラスタ作成時に`--generate-ssh-keys`オプションを指定するのはなく`--ssh-key-value`オプションに自分のSSH鍵を指定ください
 
-### 2-2. AKSクラスタの作成 (管理者権限のないアカウントの場合)
+### 2-2. AKSクラスタの作成 (管理者権限のないアカウントで実行する場合)
 
 管理者権限をもったアカウント保持者に以来して次のようにAKSクラスタ作成のためのサービスプリンシパルを作成してもらう
 
@@ -71,12 +72,12 @@ az aks get-credentials -g user_akstest -n userakscluster
 ```sh
 kubectl get nodes
 ```
-> 出力結果
+> Output
 ```
 NAME                       STATUS    ROLES     AGE       VERSION
-aks-nodepool1-40291275-0   Ready     agent     21m       v1.10.5
-aks-nodepool1-40291275-1   Ready     agent     21m       v1.10.5
-aks-nodepool1-40291275-2   Ready     agent     21m       v1.10.5
+aks-nodepool1-40291275-0   Ready    agent   2m55s   v1.12.7
+aks-nodepool1-40291275-1   Ready    agent   2m48s   v1.12.7
+aks-nodepool1-40291275-2   Ready    agent   2m53s   v1.12.7
 ```
 
 ---
