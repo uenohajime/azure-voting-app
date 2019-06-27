@@ -30,8 +30,8 @@ az aks create -g user_akstest \
 
 ### 2-2. AKSクラスタの作成 (管理者権限のないアカウントで実行する場合)
 
-管理者権限をもったアカウント保持者に依頼して次のようにAKSクラスタ作成のためのサービスプリンシパルを作成してもらう
-
+サービスプリンシパル作成権限（対象アカウントに`Owner/所有者`または`User Access Administrator/ユーザーアクセス管理者`ロールが割り当てられている）をもったアカウント保持者に依頼して次のようにAKSクラスタ作成のためのサービスプリンシパルを作成してもらう
+> NOTE: サービスプリンシパルを作成するには、アプリケーションを Azure AD テナントに登録し、サブスクリプション内のロールにアプリケーションを割り当てるためのアクセス許可が必要です。対象アカウントに`Owner/所有者`または`User Access Administrator/ユーザーアクセス管理者`ロールが割り当てられていることをご確認ください。ロールに関する詳細は[こちら](https://docs.microsoft.com/ja-jp/azure/role-based-access-control/rbac-and-directory-admin-roles#azure-rbac-roles)を参照ください
 ```sh
 # az ad sp create-for-rbac --skip-assignment -n <サービスプリンシパル名>
 az ad sp create-for-rbac --skip-assignment -n my-aks-sp
