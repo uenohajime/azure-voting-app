@@ -34,14 +34,6 @@ stages:
       vmImage: $(vmImageName)
     steps:
 
-    # - task: DockerCompose@0
-    #   displayName: Container
-    #   inputs:
-    #     containerregistrytype: 'Azure Container Registry'
-    #     azureSubscription: $(azureSubscriptionEndpoint)
-    #     azureContainerRegistry: $(containerRegistry)
-    #     dockerComposeFile: '**/docker-compose.yaml'
-    #     action: 'Build services'
     - task: DockerCompose@0
       displayName: Build services
       inputs:
@@ -53,20 +45,17 @@ stages:
         qualifyImageNames: true
         additionalImageTags: $(Build.BuildId)
 
-    # - task: DockerCompose@0
-    #   inputs:
-    #     containerregistrytype: 'Azure Container Registry'
-    #     azureSubscription: 'Edtter(bd5c9737-10a5-4178-9b83-fd223f7b4bb4)'
-    #     azureContainerRegistry: '{"loginServer":"akirainaks.azurecr.io", "id" : "/subscriptions/bd5c9737-10a5-4178-9b83-fd223f7b4bb4/resourceGroups/akirainAKS-rg2/providers/Microsoft.ContainerRegistry/registries/akirainaks"}'
-    #     dockerComposeFile: '**/docker-compose.yaml'
-    #     action: 'Build services'
-    # - task: DockerCompose@0
-    #   inputs:
-    #     containerregistrytype: 'Azure Container Registry'
-    #     azureSubscription: 'Edtter(bd5c9737-10a5-4178-9b83-fd223f7b4bb4)'
-    #     azureContainerRegistry: '{"loginServer":"akirainaks.azurecr.io", "id" : "/subscriptions/bd5c9737-10a5-4178-9b83-fd223f7b4bb4/resourceGroups/akirainAKS-rg2/providers/Microsoft.ContainerRegistry/registries/akirainaks"}'
-    #     dockerComposeFile: '**/docker-compose.yml'
-    #     action: 'Push services'
+    - task: DockerCompose@0
+      displayName: Push services
+      inputs:
+        action: Push services
+        azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+        azureContainerRegistry: $(containerRegistry)
+        dockerComposeFile: '**/docker-compose.yaml'
+        projectName: $(Build.Repository.Name)
+        qualifyImageNames: true
+        additionalImageTags: $(Build.BuildId)
+
 #     - task: Docker@2
 #       displayName: Build and push an image to container registry
 #       inputs:
