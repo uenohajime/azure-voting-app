@@ -18,7 +18,7 @@ variables:
   tag: '$(Build.BuildId)'
   imagePullSecret: 'akirainaks64f5-auth'
 
-  azureSubscriptionEndpoint: Contoso
+  azureSubscriptionEndpoint: Edtter(bd5c9737-10a5-4178-9b83-fd223f7b4bb4)
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
@@ -37,9 +37,11 @@ stages:
     - task: DockerCompose@0
       displayName: Container registry login
       inputs:
-        containerregistrytype: Azure Container Registry
-        azureSubscriptionEndpoint: $(dockerRegistryServiceConnection)
+        containerregistrytype: 'Azure Container Registry'
+        azureSubscription: $(azureSubscriptionEndpoint)
         azureContainerRegistry: $(containerRegistry)
+        dockerComposeFile: '**/docker-compose.yml'
+        action: 'Run a Docker Compose command'
 
     # - task: DockerCompose@0
     #   inputs:
