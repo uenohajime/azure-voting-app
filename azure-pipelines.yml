@@ -40,7 +40,7 @@ stages:
         containerregistrytype: 'Azure Container Registry'
         azureSubscription: $(azureSubscriptionEndpoint)
         azureContainerRegistry: $(containerRegistry)
-        dockerComposeFile: '**/docker-compose.yml'
+        dockerComposeFile: '**/docker-compose.yaml'
         action: 'Run a Docker Compose command'
 
     # - task: DockerCompose@0
