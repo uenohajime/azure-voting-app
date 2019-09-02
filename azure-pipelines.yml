@@ -34,14 +34,24 @@ stages:
       vmImage: $(vmImageName)
     steps:
 
+    # - task: DockerCompose@0
+    #   displayName: Container
+    #   inputs:
+    #     containerregistrytype: 'Azure Container Registry'
+    #     azureSubscription: $(azureSubscriptionEndpoint)
+    #     azureContainerRegistry: $(containerRegistry)
+    #     dockerComposeFile: '**/docker-compose.yaml'
+    #     action: 'Build services'
     - task: DockerCompose@0
-      displayName: Container registry login
+      displayName: Build services
       inputs:
-        containerregistrytype: 'Azure Container Registry'
-        azureSubscription: $(azureSubscriptionEndpoint)
+        action: Build services
+        azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
         azureContainerRegistry: $(containerRegistry)
         dockerComposeFile: '**/docker-compose.yaml'
-        action: 'Run a Docker Compose command'
+        projectName: $(Build.Repository.Name)
+        qualifyImageNames: true
+        additionalImageTags: $(Build.BuildId)
 
     # - task: DockerCompose@0
     #   inputs:
