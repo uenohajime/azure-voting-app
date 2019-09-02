@@ -88,7 +88,8 @@ stages:
               action: deploy
               namespace: default
               manifests: |
-                $(Pipeline.Workspace)/kubernetes-manifests/azure-vote-all-in-one.yaml
+                $(Pipeline.Workspace)/kubernetes-manifests/azure-vote-deployment.yaml
+                # $(Pipeline.Workspace)/kubernetes-manifests/azure-vote-all-in-one.yaml
               imagePullSecrets: |
                 $(imagePullSecret)
               containers: |
