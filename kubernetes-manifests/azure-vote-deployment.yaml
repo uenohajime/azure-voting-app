@@ -11,7 +11,7 @@ spec:
     spec:
       containers:
       - name: azure-vote-back
-        image: chack411/azure-vote-back:v1
+        image: akirainaks.azurecr.io/azure-vote-back:latest
         args: ["--ignore-db-dir=lost+found"]
         ports:
         - containerPort: 3306
@@ -58,7 +58,7 @@ spec:
     spec:
       containers:
       - name: azure-vote-front
-        image: chack411/azure-vote-front:v1
+        image: akirainaks.azurecr.io/azure-vote-front:latest
         resources:
           requests:
             cpu: 100m
