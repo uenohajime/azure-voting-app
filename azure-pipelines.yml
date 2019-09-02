@@ -12,13 +12,15 @@ variables:
 
   # Container registry service connection established during pipeline creation
   dockerRegistryServiceConnection: 'e5dfba4b-ae79-4de3-8f34-85ab3a5b2c45'
-  imageRepository: 'azurevotefront'
   containerRegistry: 'akirainaks.azurecr.io'
   dockerfilePath: '**/Dockerfile'
   tag: '$(Build.BuildId)'
   imagePullSecret: 'akirainaks64f5-auth'
 
   azureSubscriptionEndpoint: Edtter(bd5c9737-10a5-4178-9b83-fd223f7b4bb4)
+  imageRepositoryFront: 'azure-vote-front'
+  imageRepositoryBack: 'azure-vote-back'
+
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
@@ -56,47 +58,39 @@ stages:
         qualifyImageNames: true
         additionalImageTags: $(Build.BuildId)
 
-#     - task: Docker@2
-#       displayName: Build and push an image to container registry
-#       inputs:
-#         command: buildAndPush
-#         repository: $(imageRepository)
-#         dockerfile: $(dockerfilePath)
-#         containerRegistry: $(dockerRegistryServiceConnection)
-#         tags: |
-#           $(tag)
-          
     - upload: manifests
       artifact: manifests
 
-# - stage: Deploy
-#   displayName: Deploy stage
-#   dependsOn: Build
-#   jobs:
-#   - deployment: Deploy
-#     displayName: Deploy
-#     pool:
-#       vmImage: $(vmImageName)
-#     environment: 'chack411azurevotingapp.default'
-#     strategy:
-#       runOnce:
-#         deploy:
-#           steps:
-#           - task: KubernetesManifest@0
-#             displayName: Create imagePullSecret
-#             inputs:
-#               action: createSecret
-#               secretName: $(imagePullSecret)
-#               dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
+- stage: Deploy
+  displayName: Deploy stage
+  dependsOn: Build
+  jobs:
+  - deployment: Deploy
+    displayName: Deploy
+    pool:
+      vmImage: $(vmImageName)
+    environment: 'chack411azurevotingapp.default'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: KubernetesManifest@0
+            displayName: Create imagePullSecret
+            inputs:
+              action: createSecret
+              namespace: default
+              secretName: $(imagePullSecret)
+              dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
               
-#           - task: KubernetesManifest@0
-#             displayName: Deploy to Kubernetes cluster
-#             inputs:
-#               action: deploy
-#               manifests: |
-#                 $(Pipeline.Workspace)/manifests/deployment.yml
-#                 $(Pipeline.Workspace)/manifests/service.yml
-#               imagePullSecrets: |
-#                 $(imagePullSecret)
-#               containers: |
-#                 $(containerRegistry)/$(imageRepository):$(tag)
+          - task: KubernetesManifest@0
+            displayName: Deploy to Kubernetes cluster
+            inputs:
+              action: deploy
+              namespace: default
+              manifests: |
+                $(Pipeline.Workspace)/kubernetes-manifests/azure-vote-all-in-one.yaml
+              imagePullSecrets: |
+                $(imagePullSecret)
+              containers: |
+                $(containerRegistry)/$(imageRepositoryBack):$(tag)
+                $(containerRegistry)/$(imageRepositoryFront):$(tag)
