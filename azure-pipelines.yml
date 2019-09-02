@@ -58,8 +58,8 @@ stages:
         qualifyImageNames: true
         additionalImageTags: $(Build.BuildId)
 
-    - upload: manifests
-      artifact: manifests
+    - upload: kubernetes-manifests
+      artifact: kubernetes-manifests
 
 - stage: Deploy
   displayName: Deploy stage
