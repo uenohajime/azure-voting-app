@@ -89,12 +89,12 @@ stages:
               manifests: |
                 # $(Pipeline.Workspace)/kubernetes-manifests/storage-resources.yaml
                 # $(Pipeline.Workspace)/kubernetes-manifests/pod-secrets.yaml
-                $(Pipeline.Workspace)/kubernetes-manifests/azure-vote-back-deployment.yaml
-                $(Pipeline.Workspace)/kubernetes-manifests/azure-vote-back-service.yaml
+                # $(Pipeline.Workspace)/kubernetes-manifests/azure-vote-back-deployment.yaml
+                # $(Pipeline.Workspace)/kubernetes-manifests/azure-vote-back-service.yaml
                 $(Pipeline.Workspace)/kubernetes-manifests/azure-vote-front-deployment.yaml
                 $(Pipeline.Workspace)/kubernetes-manifests/azure-vote-front-service.yaml
               imagePullSecrets: |
                 $(imagePullSecret)
               containers: |
-                $(containerRegistry)/$(imageRepositoryBack):$(tag)
+                # $(containerRegistry)/$(imageRepositoryBack):$(tag)
                 $(containerRegistry)/$(imageRepositoryFront):$(tag)
