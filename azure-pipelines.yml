@@ -21,7 +21,6 @@ variables:
   imageRepositoryFront: 'azure-vote-front'
   imageRepositoryBack: 'azure-vote-back'
 
-
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
 
@@ -36,27 +35,27 @@ stages:
       vmImage: $(vmImageName)
     steps:
 
-    # - task: DockerCompose@0
-    #   displayName: Build services
-    #   inputs:
-    #     action: Build services
-    #     azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
-    #     azureContainerRegistry: $(containerRegistry)
-    #     dockerComposeFile: '**/docker-compose.yaml'
-    #     projectName: $(Build.Repository.Name)
-    #     qualifyImageNames: true
-    #     additionalImageTags: $(Build.BuildId)
+    - task: DockerCompose@0
+      displayName: Build services
+      inputs:
+        action: Build services
+        azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+        azureContainerRegistry: $(containerRegistry)
+        dockerComposeFile: '**/docker-compose.yaml'
+        projectName: $(Build.Repository.Name)
+        qualifyImageNames: true
+        additionalImageTags: $(Build.BuildId)
 
-    # - task: DockerCompose@0
-    #   displayName: Push services
-    #   inputs:
-    #     action: Push services
-    #     azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
-    #     azureContainerRegistry: $(containerRegistry)
-    #     dockerComposeFile: '**/docker-compose.yaml'
-    #     projectName: $(Build.Repository.Name)
-    #     qualifyImageNames: true
-    #     additionalImageTags: $(Build.BuildId)
+    - task: DockerCompose@0
+      displayName: Push services
+      inputs:
+        action: Push services
+        azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+        azureContainerRegistry: $(containerRegistry)
+        dockerComposeFile: '**/docker-compose.yaml'
+        projectName: $(Build.Repository.Name)
+        qualifyImageNames: true
+        additionalImageTags: $(Build.BuildId)
 
     - upload: kubernetes-manifests
       artifact: kubernetes-manifests
@@ -82,32 +81,20 @@ stages:
               secretName: $(imagePullSecret)
               dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
 
-          # - task: KubernetesManifest@0
-          #   displayName: Deploy azure-vote-back to Kubernetes cluster
-          #   inputs:
-          #     action: deploy
-          #     namespace: default
-          #     manifests: |
-          #       # $(Pipeline.Workspace)/kubernetes-manifests/storage-resources.yaml
-          #       # $(Pipeline.Workspace)/kubernetes-manifests/pod-secrets.yaml
-          #       $(Pipeline.Workspace)/kubernetes-manifests/azure-vote-back-deployment.yaml
-          #       $(Pipeline.Workspace)/kubernetes-manifests/azure-vote-back-service.yaml
-          #     imagePullSecrets: |
-          #       $(imagePullSecret)
-          #     containers: |
-          #       $(containerRegistry)/$(imageRepositoryBack):latest
-          #       # $(containerRegistry)/$(imageRepositoryBack):$(tag)
-
           - task: KubernetesManifest@0
-            displayName: Deploy azure-vote-front to Kubernetes cluster
+            displayName: Deploy to Kubernetes cluster
             inputs:
               action: deploy
               namespace: default
               manifests: |
+                # $(Pipeline.Workspace)/kubernetes-manifests/storage-resources.yaml
+                # $(Pipeline.Workspace)/kubernetes-manifests/pod-secrets.yaml
+                $(Pipeline.Workspace)/kubernetes-manifests/azure-vote-back-deployment.yaml
+                $(Pipeline.Workspace)/kubernetes-manifests/azure-vote-back-service.yaml
                 $(Pipeline.Workspace)/kubernetes-manifests/azure-vote-front-deployment.yaml
                 $(Pipeline.Workspace)/kubernetes-manifests/azure-vote-front-service.yaml
               imagePullSecrets: |
                 $(imagePullSecret)
               containers: |
-                $(containerRegistry)/$(imageRepositoryFront):latest
-                # $(containerRegistry)/$(imageRepositoryFront):$(tag)
+                $(containerRegistry)/$(imageRepositoryBack):$(tag)
+                $(containerRegistry)/$(imageRepositoryFront):$(tag)
