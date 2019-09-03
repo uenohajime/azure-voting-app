@@ -101,11 +101,6 @@ spec:
       containers:
       - name: azure-vote-front
         image: akirainaks.azurecr.io/azure-vote-front:latest
-        resources:
-          requests:
-            cpu: 100m
-          limits:
-            cpu: 500m
         ports:
         - containerPort: 80
         resources:
@@ -113,7 +108,7 @@ spec:
             cpu: 100m
           limits:
             cpu: 500m
-        # imagePullPolicy: Always
+        imagePullPolicy: Always
         env:
         - name: MYSQL_USER
           valueFrom:
