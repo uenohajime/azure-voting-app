@@ -88,8 +88,12 @@ stages:
               action: deploy
               namespace: default
               manifests: |
-                $(Pipeline.Workspace)/kubernetes-manifests/azure-vote-deployment.yaml
-                # $(Pipeline.Workspace)/kubernetes-manifests/azure-vote-all-in-one.yaml
+                $(Pipeline.Workspace)/kubernetes-manifests/storage-resources.yaml
+                $(Pipeline.Workspace)/kubernetes-manifests/pod-secrets.yaml
+                $(Pipeline.Workspace)/kubernetes-manifests/azure-vote-back-deployment.yaml
+                $(Pipeline.Workspace)/kubernetes-manifests/azure-vote-back-service.yaml
+                $(Pipeline.Workspace)/kubernetes-manifests/azure-vote-front-deployment.yaml
+                $(Pipeline.Workspace)/kubernetes-manifests/azure-vote-front-service.yaml
               imagePullSecrets: |
                 $(imagePullSecret)
               containers: |
