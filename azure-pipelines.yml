@@ -36,27 +36,27 @@ stages:
       vmImage: $(vmImageName)
     steps:
 
-    - task: DockerCompose@0
-      displayName: Build services
-      inputs:
-        action: Build services
-        azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
-        azureContainerRegistry: $(containerRegistry)
-        dockerComposeFile: '**/docker-compose.yaml'
-        projectName: $(Build.Repository.Name)
-        qualifyImageNames: true
-        additionalImageTags: $(Build.BuildId)
+    # - task: DockerCompose@0
+    #   displayName: Build services
+    #   inputs:
+    #     action: Build services
+    #     azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+    #     azureContainerRegistry: $(containerRegistry)
+    #     dockerComposeFile: '**/docker-compose.yaml'
+    #     projectName: $(Build.Repository.Name)
+    #     qualifyImageNames: true
+    #     additionalImageTags: $(Build.BuildId)
 
-    - task: DockerCompose@0
-      displayName: Push services
-      inputs:
-        action: Push services
-        azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
-        azureContainerRegistry: $(containerRegistry)
-        dockerComposeFile: '**/docker-compose.yaml'
-        projectName: $(Build.Repository.Name)
-        qualifyImageNames: true
-        additionalImageTags: $(Build.BuildId)
+    # - task: DockerCompose@0
+    #   displayName: Push services
+    #   inputs:
+    #     action: Push services
+    #     azureSubscriptionEndpoint: $(azureSubscriptionEndpoint)
+    #     azureContainerRegistry: $(containerRegistry)
+    #     dockerComposeFile: '**/docker-compose.yaml'
+    #     projectName: $(Build.Repository.Name)
+    #     qualifyImageNames: true
+    #     additionalImageTags: $(Build.BuildId)
 
     - upload: kubernetes-manifests
       artifact: kubernetes-manifests
@@ -95,7 +95,8 @@ stages:
               imagePullSecrets: |
                 $(imagePullSecret)
               containers: |
-                $(containerRegistry)/$(imageRepositoryBack):$(tag)
+                $(containerRegistry)/$(imageRepositoryBack):latest
+                # $(containerRegistry)/$(imageRepositoryBack):$(tag)
 
           - task: KubernetesManifest@0
             displayName: Deploy azure-vote-front to Kubernetes cluster
@@ -108,4 +109,5 @@ stages:
               imagePullSecrets: |
                 $(imagePullSecret)
               containers: |
-                $(containerRegistry)/$(imageRepositoryFront):$(tag)
+                $(containerRegistry)/$(imageRepositoryFront):latest
+                # $(containerRegistry)/$(imageRepositoryFront):$(tag)

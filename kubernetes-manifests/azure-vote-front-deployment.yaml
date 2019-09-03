@@ -24,7 +24,6 @@ spec:
             cpu: 100m
           limits:
             cpu: 500m
-        imagePullPolicy: Always
         env:
         - name: MYSQL_USER
           valueFrom:
