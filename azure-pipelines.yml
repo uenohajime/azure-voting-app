@@ -88,8 +88,8 @@ stages:
               action: deploy
               namespace: default
               manifests: |
-                $(Pipeline.Workspace)/kubernetes-manifests/storage-resources.yaml
-                $(Pipeline.Workspace)/kubernetes-manifests/pod-secrets.yaml
+                # $(Pipeline.Workspace)/kubernetes-manifests/storage-resources.yaml
+                # $(Pipeline.Workspace)/kubernetes-manifests/pod-secrets.yaml
                 $(Pipeline.Workspace)/kubernetes-manifests/azure-vote-back-deployment.yaml
                 $(Pipeline.Workspace)/kubernetes-manifests/azure-vote-back-service.yaml
               imagePullSecrets: |
