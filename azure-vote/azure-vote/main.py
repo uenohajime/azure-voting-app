@@ -25,7 +25,7 @@ mysql.init_app(app)
 
 # Change title to host name to demo NLB
 if app.config['SHOWHOST'] == "true":
-    title = socket.gethostname()
+    hostname = socket.gethostname()
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
