@@ -25,7 +25,7 @@ mysql.init_app(app)
 
 # Change title to host name to demo NLB
 if app.config['SHOWHOST'] == "true":
-    title = socket.gethostname()
+    hostname = socket.gethostname()
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -53,7 +53,7 @@ def index():
                 vote2 = i[1]              
 
         # Return index with values
-        return render_template("index.html", value1=vote1, value2=vote2, button1=button1, button2=button2, title=title)
+        return render_template("index.html", value1=vote1, value2=vote2, button1=button1, button2=button2, title=title, hostname=hostname)
 
     elif request.method == 'POST':
 
@@ -62,7 +62,7 @@ def index():
             # Empty table and return results
             cursor.execute('''Delete FROM azurevote''')
             connection.commit()
-            return render_template("index.html", value1=vote1, value2=vote2, button1=button1, button2=button2, title=title)
+            return render_template("index.html", value1=vote1, value2=vote2, button1=button1, button2=button2, title=title, hostname=hostname)
         else:
 
             # Insert vote result into DB
@@ -83,7 +83,7 @@ def index():
                     vote2 = i[1]         
                 
             # Return results
-            return render_template("index.html", value1=vote1, value2=vote2, button1=button1, button2=button2, title=title)
+            return render_template("index.html", value1=vote1, value2=vote2, button1=button1, button2=button2, title=title, hostname=hostname)
 
 @app.route('/results')
 def results():
