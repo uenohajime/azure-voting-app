@@ -68,7 +68,7 @@ stages:
     displayName: Deploy
     pool:
       vmImage: $(vmImageName)
-    environment: 'chack411azurevotingapp.default'
+    environment: 'chack411azurevotingapp.vote'
     strategy:
       runOnce:
         deploy:
