@@ -77,7 +77,7 @@ stages:
             displayName: Create imagePullSecret
             inputs:
               action: createSecret
-              namespace: default
+              namespace: vote
               secretName: $(imagePullSecret)
               dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
 
@@ -85,7 +85,7 @@ stages:
             displayName: Deploy to Kubernetes cluster
             inputs:
               action: deploy
-              namespace: default
+              namespace: vote
               manifests: |
                 # $(Pipeline.Workspace)/kubernetes-manifests/storage-resources.yaml
                 # $(Pipeline.Workspace)/kubernetes-manifests/pod-secrets.yaml
