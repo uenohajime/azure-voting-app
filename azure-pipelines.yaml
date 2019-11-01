@@ -62,6 +62,20 @@ stages:
     - upload: kubernetes-manifests
       artifact: kubernetes-manifests
 
+- stage: Deploy0
+  displayName: Deploy for test
+  jobs:
+  - deployment: DeployArtifacts
+    displayName: deploy Artifacts
+    pool:
+      vmImage: $(vmImageName)
+    environment: 'mytestenv'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - script: echo Hello world!
+
 - stage: Deploy
   displayName: Deploy stage
   dependsOn: Build
