@@ -62,7 +62,7 @@ stages:
     - upload: kubernetes-manifests
       artifact: kubernetes-manifests
 
-- stage: Deploy
+- stage: Deploy0
   displayName: Deploy for test
   jobs:
   - deployment: DeployArtifacts
