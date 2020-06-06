@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template
-from flaskext.mysql import MySQL
+import mysql.connector as mysqlconn
 import os
 import random
 import socket
@@ -14,14 +14,23 @@ button2 =       app.config['VOTE2VALUE']
 title =         app.config['TITLE']
 
 # MySQL configurations
-app.config['MYSQL_DATABASE_USER'] = os.environ['MYSQL_USER'] 
-app.config['MYSQL_DATABASE_PASSWORD'] = os.environ['MYSQL_PASSWORD']
-app.config['MYSQL_DATABASE_DB'] = os.environ['MYSQL_DATABASE']
-app.config['MYSQL_DATABASE_HOST'] = os.environ['MYSQL_HOST']
+MYSQL_DATABASE_USER     = os.environ['MYSQL_USER'] 
+MYSQL_DATABASE_PASSWORD = os.environ['MYSQL_PASSWORD']
+MYSQL_DATABASE_DB       = os.environ['MYSQL_DATABASE']
+MYSQL_DATABASE_HOST     = os.environ['MYSQL_HOST']
+MYSQL_DATABASE_SSL_CA = './BaltimoreCyberTrustRoot.crt.pem'
 
-# MySQL Object
-mysql = MySQL()
-mysql.init_app(app)
+# Return MySQL Connection Object
+def connect():
+    return mysqlconn.connect(
+        host = MYSQL_DATABASE_HOST,
+        port = '3306',
+        user = MYSQL_DATABASE_USER,
+        password = MYSQL_DATABASE_PASSWORD,
+        database = MYSQL_DATABASE_DB,
+        ssl_ca = MYSQL_DATABASE_SSL_CA,
+        ssl_verify_cert = True
+    )
 
 # Change title to host name to demo NLB
 if app.config['SHOWHOST'] == "true":
@@ -29,9 +38,11 @@ if app.config['SHOWHOST'] == "true":
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    connection = None
 
     # MySQL Connection
-    connection = mysql.connect()
+    if connection == None or not connection.is_connected():
+        connection = connect()
     cursor = connection.cursor()
 
     # Vote tracking
@@ -67,7 +78,7 @@ def index():
 
             # Insert vote result into DB
             vote = request.form['vote']
-            cursor.execute('''INSERT INTO azurevote (votevalue) VALUES (%s)''', (vote))
+            cursor.execute('''INSERT INTO azurevote (votevalue) VALUES(%s)''', (vote,))
             connection.commit()
             
             # Get current values
@@ -87,9 +98,11 @@ def index():
 
 @app.route('/results')
 def results():
+    connection = None
 
     # MySQL Connection
-    connection = mysql.connect()
+    if connection == None or not connection.is_connected():
+        connection = connect()
     cursor = connection.cursor()
 
     # Get current values
